@@ -1,25 +1,25 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react'
+import axios from 'axios'
+import {apiUrl} from './config'
+import './App.css'
 
 function App() {
+  const [data, setData] = useState('요청 전')
+
+  const clickPost = async () => {
+    console.log(axios.post(`${apiUrl}/post_test`, {testKey: 'testValue'}))
+    const res = await axios.post(`${apiUrl}/post_test`, {
+      testKey: 'testValue',
+    })
+    setData(res.data)
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <button onClick={() => clickPost()}>Click Me</button>
+      <p>{data}</p>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
