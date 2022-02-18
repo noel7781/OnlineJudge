@@ -6,9 +6,11 @@ async fn index(_req: HttpRequest) -> String {
     "[GET] Hello World!".to_owned()
 }
 
-#[post("/")]
-async fn index_post(_req: HttpRequest) -> String {
-    "[POST] Hello World!".to_owned()
+#[post("/post_test")]
+async fn index_post(req: HttpRequest) -> String {
+    let mut req = req.query_string().to_string();
+    req.push('!');
+    req 
 }
 
 #[actix_web::main]
