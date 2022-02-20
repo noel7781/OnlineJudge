@@ -1,5 +1,11 @@
 use actix_cors::Cors;
-use actix_web::{get, post, http, App, HttpServer, HttpRequest};
+use actix_web::{get, post, http, web, App, HttpServer, HttpRequest, HttpResponse, Error};
+use serde:: Deserialize;
+
+#[derive(Debug, Deserialize)]
+struct Info {
+    testKey: String,
+}
 
 #[get("/")]
 async fn index(_req: HttpRequest) -> String {
@@ -7,17 +13,21 @@ async fn index(_req: HttpRequest) -> String {
 }
 
 #[post("/post_test")]
-async fn index_post(req: HttpRequest) -> String {
-    let mut req = req.query_string().to_string();
-    req.push('!');
-    req 
+async fn index_post(req: web::Json<Info> ) ->  String {
+    println!("request: {:#?}", req);
+    // // Ok(web::Json(Info{
+    // //     message: info.message.clone() + "!"
+    // // }))
+    // format!("123")
+    format!("{}!", req.testKey)
 }
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     HttpServer::new(|| {
         let cors = Cors::default()
-        .allowed_origin("https://127.0.0.1:3000")
+        .allowed_origin("http://127.0.0.1:3000")
+        .allowed_origin("http://localhost:3000")
         .allowed_methods(vec!["GET", "POST"])
         .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
               .allowed_header(http::header::CONTENT_TYPE)
@@ -27,7 +37,7 @@ async fn main() -> std::io::Result<()> {
             .service(index)
             .service(index_post)
     })
-    .bind("127.0.0.1:8080")?
+    .bind("0.0.0.0:8080")?
     .run()
     .await?;
 
