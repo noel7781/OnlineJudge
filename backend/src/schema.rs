@@ -1,6 +1,14 @@
 table! {
-    answer (id) {
+    problems (id) {
         id -> Integer,
-        filepath -> Text,
+        title -> Text,
+        accepted_cnt -> Nullable<Integer>,
+        submit_cnt -> Nullable<Integer>,
+        description -> Text,
+        input_desc -> Text,
+        output_desc -> Text,
+        difficulty -> Text,
+        time_limit -> Nullable<Integer>,
+        memory_limit -> Nullable<Integer>,
     }
 }
