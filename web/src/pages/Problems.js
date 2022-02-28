@@ -1,12 +1,13 @@
-import React from 'react'
+import React from "react";
+import Problems from "../components/Problems";
 
 const Home = () => {
   return (
     <div>
       <h1>Problems</h1>
-      <p>문제 목록을 보여주는 페이지입니다.</p>
+      <Problems />
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;
