@@ -11,6 +11,8 @@ import Problems from "./pages/Problems";
 import Status from "./pages/Status";
 import Discuss from "./pages/Discuss";
 import NotFound from "./pages/NotFound";
+import Problem from "./pages/Problem";
+import Submit from "./pages/Submit";
 
 ReactDOM.render(
   <>
@@ -19,6 +21,8 @@ ReactDOM.render(
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/problems" element={<Problems />} />
+        <Route path="/problem/:id" element={<Problem />} />
+        <Route path="/problem/:id/submission" element={<Submit />} />
         <Route path="/status" element={<Status />} />
         <Route path="/discuss" element={<Discuss />} />
         <Route path="*" element={<NotFound />} />

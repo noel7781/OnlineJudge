@@ -15,7 +15,7 @@ fn main() {
     let mut filepath = String::new();
     stdin().read_line(&mut filepath).unwrap();
 
-    create_answer(&connection, problem_id, &filepath);
+    // create_problem(&connection, problem_id, &filepath);
 }
 
 // #[cfg(not(windows))]
