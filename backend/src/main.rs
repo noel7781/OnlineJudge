@@ -12,6 +12,7 @@ use std::io::Read;
 // struct Info {
 //     testKey: String,
 // }
+
 #[get("/")]
 async fn index(_req: HttpRequest) -> String {
     "[GET] Hello World!".to_owned()
@@ -41,6 +42,12 @@ async fn get_problem(req: HttpRequest) -> Result<impl Responder> {
     Ok(web::Json(problem))
 }
 
+#[post("/submit")]
+async fn post_submit(req: web::Json<SubmitInfo>) -> String {
+    println!("request: {:#?}", req);
+    process_submit(req);
+    format!("Submitted!")
+}
 // #[post("/Problem/{id}")]
 // async fn get_answer(req: HttpRequest) -> String {
 //     let con = establish_connection();
@@ -69,6 +76,7 @@ async fn main() -> std::io::Result<()> {
             .service(index)
             .service(get_problem)
             .service(get_problem_list)
+            .service(post_submit)
     })
     .bind("0.0.0.0:8080")?
     .run()

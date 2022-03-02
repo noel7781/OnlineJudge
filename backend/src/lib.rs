@@ -3,9 +3,21 @@ extern crate diesel;
 pub mod models;
 pub mod schema;
 use self::models::{NewProblem, Problem};
+use actix_web::web;
 use diesel::prelude::*;
 use dotenv::dotenv;
+use serde::Deserialize;
 use std::env;
+use std::fs::File;
+use std::io::{self, BufRead, BufWriter, Write};
+use std::process::Command;
+
+#[derive(Debug, Deserialize)]
+pub struct SubmitInfo {
+    problem_id: i32,
+    source_code: String,
+    language: String,
+}
 
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();
@@ -68,3 +80,62 @@ pub fn retrieve_problem_list<'a>(conn: &SqliteConnection) -> Vec<Problem> {
 
     results.clone()
 }
+
+pub fn process_submit(req: web::Json<SubmitInfo>) {
+    let code = req.source_code.clone();
+    let language = req.language.clone();
+    let pid = req.problem_id;
+    compile_and_run(pid, &code, &language);
+}
+
+fn compile_and_run(pid: i32, code: &str, language: &str) {
+    match language {
+        "c" => {
+            compile_run_c(pid, code);
+        }
+        "c++" => {
+            let mut f = File::create("test.cpp").unwrap();
+            let mut buf_writer = BufWriter::new(f);
+            buf_writer.write_all(code.as_bytes()).unwrap();
+            buf_writer.flush().unwrap();
+            compile_run_cpp(pid)
+        }
+        "python" => {
+            run_python(pid, code);
+        }
+        _ => println!("Unsupported language"),
+    }
+}
+
+fn compile_run_c(pid: i32, code: &str) {}
+
+fn compile_run_cpp(pid: i32) {
+    Command::new("ls")
+        .status()
+        .expect("ls command failed to start");
+
+    let output = Command::new("g++")
+        .arg("test.cpp")
+        .arg("-std=c++11")
+        .arg("-o")
+        .arg("test.out")
+        .output()
+        .expect("failed to execute process");
+
+    println!("status: {}", output.status);
+    println!("[pid {}] Compilation success!", pid);
+
+    Command::new("ls")
+        .status()
+        .expect("ls command failed to start");
+
+    let output = Command::new("./test.out")
+        .output()
+        .expect("failed to execute process");
+    let f = File::create(format!("{}.out", pid)).unwrap();
+    let mut buf_writer = BufWriter::new(f);
+    buf_writer.write_all(&output.stdout).unwrap();
+    buf_writer.flush().unwrap();
+}
+
+fn run_python(pid: i32, code: &str) {}
