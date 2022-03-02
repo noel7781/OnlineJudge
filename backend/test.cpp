@@ -1,5 +1,6 @@
 #include <iostream>
 using namespace std;
 int main() {
-    cout << "hello world!\n";
+    int A, B; cin >> A >> B;
+    cout << A + B << "\n";
 }

@@ -44,7 +44,7 @@ async fn get_problem(req: HttpRequest) -> Result<impl Responder> {
 
 #[post("/submit")]
 async fn post_submit(req: web::Json<SubmitInfo>) -> String {
-    println!("request: {:#?}", req);
+    // println!("request: {:#?}", req);
     process_submit(req);
     format!("Submitted!")
 }

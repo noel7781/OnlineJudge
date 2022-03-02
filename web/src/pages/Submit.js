@@ -1,19 +1,20 @@
 import Highlight from "react-highlight";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { apiUrl } from "../config";
+import { useLocation, useParams } from "react-router-dom";
 
 const supportedLang = ["c++", "c", "java", "python", "javascript"];
 
-const Submit = (id) => {
-  //   useEffect(() => hljs.highlightAll(), []);
-  const onSubmit = (e) => {
+const Submit = () => {
+  const { id } = useParams();
+
+  const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(e);
-    // let index = e.target.form.find((it) => it.checked === true);
     let language = "c++";
 
-    console.log(e.target.form[0]);
-    console.log(e.target.form[1].value);
-    // let language = e.target.form.find((it) => it.checked === true);
+    // console.log(e.target.form[0]);
+    // console.log(e.target.form[1].value);
     for (let i in supportedLang) {
       if (e.target.form[Number(i) + 1].checked === true) {
         language = supportedLang[Number(i)];
@@ -21,8 +22,14 @@ const Submit = (id) => {
       }
     }
     const source_code = e.target.form[6].value;
-    console.log("language:", language);
-    console.log("source code:", source_code);
+    // console.log("language:", language);
+    // console.log("source code:", source_code);
+    console.log("id: ", id);
+    const res = await axios.post(`${apiUrl}/submit`, {
+      problem_id: Number(id),
+      source_code: source_code,
+      language: language,
+    });
   };
   const [textArea, setTextArea] = useState("hi");
   const [lang, setLang] = useState("cpp");

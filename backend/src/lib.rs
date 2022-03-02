@@ -110,9 +110,9 @@ fn compile_and_run(pid: i32, code: &str, language: &str) {
 fn compile_run_c(pid: i32, code: &str) {}
 
 fn compile_run_cpp(pid: i32) {
-    Command::new("ls")
-        .status()
-        .expect("ls command failed to start");
+    // Command::new("ls")
+    //     .status()
+    //     .expect("ls command failed to start");
 
     let output = Command::new("g++")
         .arg("test.cpp")
@@ -122,20 +122,36 @@ fn compile_run_cpp(pid: i32) {
         .output()
         .expect("failed to execute process");
 
-    println!("status: {}", output.status);
-    println!("[pid {}] Compilation success!", pid);
-
-    Command::new("ls")
-        .status()
-        .expect("ls command failed to start");
-
-    let output = Command::new("./test.out")
+    // Command::new("ls")
+    //     .status()
+    //     .expect("ls command failed to start");
+    let output = Command::new("/bin/cat")
+        .arg("./problem/1/input/1.in")
         .output()
         .expect("failed to execute process");
+    io::stdout().write_all(&output.stdout).unwrap();
+
+    let output = Command::new("./test.out")
+        .arg("<")
+        .stdin(File::open("problem/1/input/1.in").unwrap())
+        .output()
+        .expect("failed to execute process");
+    io::stdout().write_all(&output.stdout).unwrap();
     let f = File::create(format!("{}.out", pid)).unwrap();
     let mut buf_writer = BufWriter::new(f);
     buf_writer.write_all(&output.stdout).unwrap();
     buf_writer.flush().unwrap();
+
+    let diff = Command::new("diff")
+        // .arg("--strip-trailing-cr")
+        .arg("-w")
+        .arg("-B")
+        .arg(format!("{}.out", pid))
+        .arg(format!("problem/{}/output/1.out", pid))
+        .output()
+        .expect("failed to diff process");
+
+    io::stdout().write_all(&diff.stdout).unwrap();
 }
 
 fn run_python(pid: i32, code: &str) {}
