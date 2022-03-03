@@ -45,8 +45,11 @@ async fn get_problem(req: HttpRequest) -> Result<impl Responder> {
 #[post("/submit")]
 async fn post_submit(req: web::Json<SubmitInfo>) -> String {
     // println!("request: {:#?}", req);
-    process_submit(req);
-    format!("Submitted!")
+    let is_correct = process_submit(req);
+    match is_correct {
+        true => "Success".to_owned(),
+        false => "Failure".to_owned(),
+    }
 }
 // #[post("/Problem/{id}")]
 // async fn get_answer(req: HttpRequest) -> String {

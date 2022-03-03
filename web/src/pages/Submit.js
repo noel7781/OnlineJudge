@@ -30,6 +30,7 @@ const Submit = () => {
       source_code: source_code,
       language: language,
     });
+    console.log("submit result:", res);
   };
   const [textArea, setTextArea] = useState("hi");
   const [lang, setLang] = useState("cpp");
