@@ -12,3 +12,19 @@ table! {
         memory_limit -> Nullable<Integer>,
     }
 }
+
+table! {
+    submits (sid) {
+        sid -> Integer,
+        pid -> Integer,
+        uid -> Nullable<Integer>,
+        result -> Integer,
+        submit_at -> Nullable<Text>,
+        language -> Nullable<Text>,
+    }
+}
+
+allow_tables_to_appear_in_same_query!(
+    problems,
+    submits,
+);

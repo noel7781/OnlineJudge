@@ -31,8 +31,8 @@ const Problems = () => {
       <h1>Problems</h1>
       <p>문제 목록을 보여주는 페이지입니다.</p>
 
-      <table className="table table-borderless">
-        <thead>
+      <table className="table table-bordered table-striped">
+        <thead className="thead-dark">
           <tr>
             <th scope="col">#</th>
             <th scope="col">Problem</th>
@@ -50,7 +50,7 @@ const Problems = () => {
             >
               <th scope="row">{problem.id}</th>
               <td>{problem.title}</td>
-              <td>{problem.accuracy}%</td>
+              <td>{problem.accuracy.toFixed(2)}%</td>
               <td>{problem.difficulty}</td>
             </tr>
           ))}

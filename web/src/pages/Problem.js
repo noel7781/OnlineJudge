@@ -19,14 +19,14 @@ const Problem = () => {
       <div className="position-relative">
         <button
           onClick={() => (window.location.href = `/problem/${id}/submission`)}
-          className="position-absolute top-0 end-0 col-2"
+          className="position-absolute top-0 end-0 col-2 btn btn-info"
         >
           제출
         </button>
       </div>
       <br />
       <br />
-      <table className="table ">
+      <table className="table table-bordered">
         <thead>
           <tr>
             <th scope="col">시간제한</th>

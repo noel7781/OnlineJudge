@@ -2,13 +2,28 @@ import Highlight from "react-highlight";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { apiUrl } from "../config";
-import { useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import WithLineNumbers from "../components/WIthLineNumbers";
+import Editor from "../components/Editor";
 
-const supportedLang = ["c++", "c", "java", "python", "javascript"];
+const supportedLang = [
+  "c++",
+  "c",
+  "java(not yet)",
+  "python",
+  "javascript(not yet)",
+];
 
 const Submit = () => {
   const { id } = useParams();
 
+  const showResult = (result) => {
+    if (result.data === "Success") {
+      alert("정답입니다!!!");
+    } else {
+      alert("틀렸습니다!!!");
+    }
+  };
   const onSubmit = async (e) => {
     e.preventDefault();
     let language = "c++";
@@ -24,19 +39,20 @@ const Submit = () => {
     const source_code = e.target.form[6].value;
     // console.log("language:", language);
     // console.log("source code:", source_code);
-    console.log("id: ", id);
+    // console.log("id: ", id);
     const res = await axios.post(`${apiUrl}/submit`, {
       problem_id: Number(id),
       source_code: source_code,
       language: language,
     });
+    showResult(res);
     console.log("submit result:", res);
   };
-  const [textArea, setTextArea] = useState("hi");
+  const [code, setCode] = useState("");
   const [lang, setLang] = useState("cpp");
-  const onChange = (e) => {
-    setTextArea(e.target.value);
-  };
+  // const onChange = (e) => {
+  //   setCode(e.target.value);
+  // };
   return (
     <form id="code_form" onSubmit={onSubmit}>
       <button type="button" className="btn btn-success" onClick={onSubmit}>
@@ -58,8 +74,9 @@ const Submit = () => {
           );
         })}
       </div>
-      <Highlight language={lang}>{textArea}</Highlight>
-      <textarea value={textArea.value} onChange={onChange} />
+      {/* <Highlight language={lang}>{textArea}</Highlight>
+      <textarea value={textArea.value} onChange={onChange} /> */}
+      <Editor code={code} setCode={setCode} lang={lang} />
     </form>
   );
 };
